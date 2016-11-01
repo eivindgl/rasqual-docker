@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /clapack/build /clapack/libs && \
     curl http://www.netlib.org/clapack/clapack-3.2.1-CMAKE.tgz | tar -zxf - -C /clapack --strip-components 1 && \
     cd /clapack/build && \
-    cmake .. && \
+    cmake -Wno-dev .. && \
     make -j 4 && \
     find . -name '*.a' | xargs cp -t /clapack/libs
 
