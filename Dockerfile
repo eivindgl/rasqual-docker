@@ -1,20 +1,23 @@
 FROM ubuntu:16.10
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    git
 
-RUN add-apt-repository -y universe && apt-get install -y \
-    f2c \
+RUN apt-get update && apt-get install -y \
+    cmake \
+    curl \
     gcc \
-    libblas-dev \
-    libcblas-dev \
-    libclapack-dev \
-    libgsl-dev \
-    liblapack-dev \
+    git \
     make \
+    libgsl-dev \
     zlib1g-dev 
 
-RUN git clone --depth 1 https://github.com/dg13/rasqual.git /rasqual && \
-     make -C /rasqual/src && \
-     make -C /rasqual/src/ASVCF && \
-     cp /rasqual/src/rasqual /usr/bin
+RUN mkdir -p /clapack/build /clapack/libs && \
+    curl http://www.netlib.org/clapack/clapack-3.2.1-CMAKE.tgz | tar -zxf - -C /clapack --strip-components 1 && \
+    cd /clapack/build && \
+    cmake .. && \
+    make -j 4 && \
+    find . -name '*.a' | xargs cp -t /clapack/libs
+RUN git clone --depth 1 https://github.com/eivindgl/rasqual.git && \
+    cd /rasqual/src && \
+    export CFLAGS=-I/clapack/INCLUDE && \
+    export LDFLAGS=-L/clapack/libs && \
+    make -j 4
+
