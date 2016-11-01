@@ -14,7 +14,7 @@ RUN add-apt-repository -y universe && apt-get install -y \
     make \
     zlib1g-dev 
 
-RUN git clone --depth 1 https://github.com/eivindgl/rasqual.git /rasqual && \
+RUN git clone --depth 1 https://github.com/dg13/rasqual.git /rasqual && \
      make -C /rasqual/src && \
      make -C /rasqual/src/ASVCF && \
      cp /rasqual/src/rasqual /usr/bin
