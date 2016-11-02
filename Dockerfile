@@ -16,18 +16,8 @@ RUN mkdir -p /clapack/build /clapack/libs && \
     make -j 4 && \
     find . -name '*.a' | xargs cp -t /clapack/libs
 
-RUN git clone --depth 1 https://github.com/eivindgl/rasqual.git && \
+RUN git clone --depth 1 https://github.com/dg13/rasqual.git && \
     cd /rasqual/src && \
     export CFLAGS=-I/clapack/INCLUDE && \
     export LDFLAGS=-L/clapack/libs && \
     make -j 4
-
-# This is identical to command above, except the git repo.
-# Will fail if uncommented due to order of libraries in the Makefile
-#
-# RUN git clone --depth 1 https://github.com/dg13/rasqual.git
-#     cd /rasqual/src && \
-#     export CFLAGS=-I/clapack/INCLUDE && \
-#     export LDFLAGS=-L/clapack/libs && \
-#     make -j 4
-
